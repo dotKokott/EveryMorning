@@ -27,6 +27,7 @@ public class Razor : MonoBehaviour {
         if (!Shave && Input.GetMouseButtonDown(0)) {
             Shave = true;
             GetComponent<AudioSource>().Play();
+            //iTween.MoveTo()
         }
 
         if(Shave && Input.GetMouseButtonUp(0)) {
