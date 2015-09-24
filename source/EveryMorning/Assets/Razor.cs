@@ -20,15 +20,27 @@ public class Razor : MonoBehaviour {
         GameObject.Find("Quad").GetComponent<Renderer>().material.mainTexture = texture;
     }
 
+    bool Shave = false;
 	
 	// Update is called once per frame
 	void Update () {
+        if (!Shave && Input.GetMouseButtonDown(0)) {
+            Shave = true;
+            GetComponent<AudioSource>().Play();
+        }
+
+        if(Shave && Input.GetMouseButtonUp(0)) {
+            Shave = false;
+            GetComponent<AudioSource>().Stop();
+        }
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit info;
         if (Physics.Raycast(ray, out info)) {
             transform.position = new Vector3(info.point.x + 0.2f, info.point.y - 0.5f, transform.position.z);
             
             if (info.collider.name != "Quad") return;
+            if (!Shave) return;
 
             var tex = texture;
 
