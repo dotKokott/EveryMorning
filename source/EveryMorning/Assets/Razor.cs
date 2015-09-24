@@ -27,12 +27,17 @@ public class Razor : MonoBehaviour {
         if (!Shave && Input.GetMouseButtonDown(0)) {
             Shave = true;
             GetComponent<AudioSource>().Play();
-            //iTween.MoveTo()
+            iTween.MoveTo(gameObject, iTween.Hash("z", -6.05f, "time", 0.2f, "easetype", iTween.EaseType.easeOutCubic));
+            GetComponentInChildren<ParticleSystem>().Play();
         }
 
         if(Shave && Input.GetMouseButtonUp(0)) {
             Shave = false;
             GetComponent<AudioSource>().Stop();
+
+            GetComponentInChildren<ParticleSystem>().Stop();
+
+            iTween.MoveTo(gameObject, iTween.Hash("z", -6.415f, "time", 0.1f, "easetype", iTween.EaseType.easeOutCubic));
         }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -52,7 +57,7 @@ public class Razor : MonoBehaviour {
                     coord.x *= tex.width;
                     coord.y *= tex.height;
 
-                    coord.x += -105 + x;
+                    coord.x += -85 + x;
                     coord.y += 75 + y;
                     if (coord.x < tex.width && y < tex.height) {
                         tex.SetPixel((int)coord.x - 12, (int)coord.y - 12, clear);
