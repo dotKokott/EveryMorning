@@ -52,8 +52,7 @@ public class Razor : MonoBehaviour {
 
             var diff = Mathf.Abs(sym1 - sym2);
 
-            ShaveTimer = 0;
-            
+            ShaveTimer = 0;            
         }
 
         if (!Shave && Input.GetMouseButtonDown(0)) {
@@ -75,8 +74,10 @@ public class Razor : MonoBehaviour {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit info;
         if (Physics.Raycast(ray, out info)) {
-            transform.position = new Vector3(info.point.x + 0.2f, info.point.y - 0.5f, transform.position.z);
+            var newPos = new Vector3(info.point.x + 0.2f, info.point.y - 0.5f, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 5);            
             
+
             if (info.collider.name != "Quad") return;
             if (!Shave) return;
 
@@ -86,6 +87,7 @@ public class Razor : MonoBehaviour {
             for (var x = 0; x < 50; x++) {
                 for (var y = 0; y < 20; y++) {
                     var coord = info.textureCoord;
+
                     coord.x *= tex.width;
                     coord.y *= tex.height;
 
