@@ -110,19 +110,27 @@ public class Razor : MonoBehaviour {
         }       
 	}
 
-    public IEnumerator TakePicture() {                   
+    public IEnumerator TakePicture() {
+        Camera.main.fieldOfView = 54;
         RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
         Camera.main.targetTexture = rt;
         Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         Camera.main.Render();
         RenderTexture.active = rt;
         screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenShot.Apply();
         Camera.main.targetTexture = null;
         RenderTexture.active = null;
+
+        Camera.main.fieldOfView = 72;
 
         Fader.FadeIn(0.2f);
         yield return new WaitForSeconds(0.2f);
         
-        Fader.FadeOut(0.4f);    
+        Fader.FadeOut(0.4f);
+
+        iPhoneTweener._.SlideIn(screenShot, 100, 5);
+
+        ;
     }
 }
