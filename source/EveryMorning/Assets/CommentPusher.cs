@@ -37,27 +37,18 @@ public class CommentPusher : MonoBehaviour {
         prefab = Resources.Load<GameObject>( "insta_comment" );
     }
 
-    // Update is called once per frame
-    void Update() {
-        if ( Input.GetKeyDown( KeyCode.Space ) ) {
-            AddComments( Random.Range( 5, 10 ) );
-            //for ( int i = 0; i < 5; i++ ) {
-            //    var c = Instantiate( prefab );
-            //    c.transform.SetParent( transform );
-            //    c.transform.Find( "comment_author" ).GetComponent<Text>().text = authors[Random.Range( 0, authors.Length )];
-            //    c.transform.Find( "comment_message" ).GetComponent<Text>().text = messages[Random.Range( 0, messages.Length )];
-            //    var pos = new Vector2( 0, -140 - ( 30 * i ) );
-            //    c.GetComponent<RectTransform>().localPosition = pos;
-            //    c.GetComponent<RectTransform>().localScale = new Vector3( 1, 1, 1 );
-            //}
-        }
-    }
-
     public void AddComments( int max ) {
         StartCoroutine( addComments( max ) );
     }
 
     private IEnumerator addComments( int max ) {
+        rtransform.localPosition = new Vector3( 0, 30 );
+        var oldComment = GameObject.Find( "insta_comment(Clone)" );
+        while ( oldComment != null ) {
+            DestroyImmediate( oldComment, false );
+            oldComment = GameObject.Find( "insta_comment(Clone)" );
+        }
+
         for ( int i = 0; i < max; i++ ) {
             var c = Instantiate( prefab );
             c.transform.SetParent( transform );
@@ -67,13 +58,11 @@ public class CommentPusher : MonoBehaviour {
             c.GetComponent<RectTransform>().localPosition = pos;
             c.GetComponent<RectTransform>().localScale = new Vector3( 1, 1, 1 );
 
-            var delay = Random.Range( 0.1f, 1 );
+            var delay = Random.Range( 0.25f, 1 );
             if ( i >= 3 ) {
                 var val = rtransform.localPosition.y;
-                Debug.Log( "-------------" );
                 iTween.ValueTo( gameObject, iTween.Hash( "time", 0.25f, "easetype", iTween.EaseType.easeInOutCubic,
                     "onupdate", "movecomments", "from", val, "to", val + 30 ) );
-                //iTween.MoveBy( gameObject, new Vector3( 0, 30, 0 ), 0.25f );
             }
             yield return new WaitForSeconds( delay );
         }

@@ -17,16 +17,9 @@ public class LikeCounter : MonoBehaviour {
         instance = this;
     }
 
-    // Update is called once per frame
-    void Update() {
-        if ( Input.GetKeyDown( KeyCode.Space ) ) {
-            StartCount( Random.Range( 0, 100 ) );
-        }
-    }
-
-    public void StartCount( int max ) {
+    public void StartCount( int amount ) {
         iTween.ValueTo( gameObject, iTween.Hash(
-            "time", 3, "from", 0, "to", max,
+            "time", 3, "from", 0, "to", amount,
             "onupdate", "updatecounter",
             "easetype", iTween.EaseType.easeOutBack ) );
     }
