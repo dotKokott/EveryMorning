@@ -9,6 +9,8 @@ public class Razor : MonoBehaviour {
     private float ShaveTimer = 0;
 
     public Color c;
+
+    public AudioClip Click;
 	void Start () {
         ResetTex();
         c = new Color(0, 0, 1f, 0);
@@ -71,6 +73,7 @@ public class Razor : MonoBehaviour {
             iTween.MoveTo(gameObject, iTween.Hash("z", -6.415f, "time", 0.1f, "easetype", iTween.EaseType.easeOutCubic));
 
             StartCoroutine(TakePicture());
+            GetComponent<AudioSource>().PlayOneShot(Click);
         }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -119,6 +122,7 @@ public class Razor : MonoBehaviour {
 
         Fader.FadeIn(0.2f);
         yield return new WaitForSeconds(0.2f);
+        
         Fader.FadeOut(0.4f);    
     }
 }
