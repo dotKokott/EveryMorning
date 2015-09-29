@@ -69,6 +69,8 @@ public class Razor : MonoBehaviour {
             GetComponentInChildren<ParticleSystem>().Stop();
 
             iTween.MoveTo(gameObject, iTween.Hash("z", -6.415f, "time", 0.1f, "easetype", iTween.EaseType.easeOutCubic));
+
+            StartCoroutine(TakePicture());
         }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -102,7 +104,21 @@ public class Razor : MonoBehaviour {
             tex.Apply();
 
             //info.collider.GetComponent<Renderer>().material.mainTexture = newTex;
-
         }       
 	}
+
+    public IEnumerator TakePicture() {                   
+        RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
+        Camera.main.targetTexture = rt;
+        Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        Camera.main.Render();
+        RenderTexture.active = rt;
+        screenShot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        Camera.main.targetTexture = null;
+        RenderTexture.active = null;
+
+        Fader.FadeIn(0.2f);
+        yield return new WaitForSeconds(0.2f);
+        Fader.FadeOut(0.4f);    
+    }
 }
