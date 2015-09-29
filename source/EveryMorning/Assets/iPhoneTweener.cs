@@ -10,7 +10,8 @@ public class iPhoneTweener : MonoBehaviour {
         _ = this;
     }
 
-    public void SlideIn( int likes, int comments ) {
+    public void SlideIn( Texture2D picture, int likes, int comments ) {
+        ImageSwapper._.SwapImage( picture );
         iTween.MoveTo( gameObject, iTween.Hash(
             "time", 1, "islocal", true, "position", new Vector3( 0, 0, 0 ),
             "easetype", iTween.EaseType.easeInOutCubic ) );
