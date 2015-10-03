@@ -16,9 +16,12 @@ public class CommentPusher : MonoBehaviour {
     private string[] authors = {
         "dotKokott",
         "Thundernerd",
-        "Chikwan",
+        "chi_doubleu",
         "MountainDopp",
-        "Laurenla"
+        "aparaitre",
+        "RYStorm",
+        "norkibit",
+        "onlyfortheart"
     };
     private string[] messages = {
         "Whoah, what have you done dude!?",
@@ -66,7 +69,7 @@ public class CommentPusher : MonoBehaviour {
     }
 
     public void AddComments( int max ) {
-        StartCoroutine( addComments( max ) );
+        StartCoroutine( addComments( Mathf.Min(max, messages.Length)) );
     }
 
     private IEnumerator addComments( int max ) {
@@ -83,6 +86,10 @@ public class CommentPusher : MonoBehaviour {
         for ( int i = 0; i < max; i++ ) {
             var c = Instantiate( prefab );
             c.transform.SetParent( transform );
+
+            if (au.Count == 0) {
+                au = new List<string>(authors);
+            }
 
             int index = Random.Range( 0, au.Count );
             c.transform.Find( "comment_author" ).GetComponent<Text>().text = au[index];// authors[Random.Range( 0, authors.Length )];

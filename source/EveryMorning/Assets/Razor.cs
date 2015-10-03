@@ -5,12 +5,16 @@ public class Razor : MonoBehaviour {
 
     Texture2D texture;
 
-    public float ShaveTime = 5;
+    public float ShaveTime = 15;
     private float ShaveTimer = 0;
+
+    public bool Shaving = true;
 
     public Color c;
 
     public AudioClip Click;
+
+    public Texture2D OriginalTexture;
 	void Start () {
         ResetTex();
         c = new Color(0, 0, 1f, 0);
@@ -20,7 +24,7 @@ public class Razor : MonoBehaviour {
         texture = new Texture2D(512, 512, TextureFormat.RGBA32, false);
         texture.hideFlags = HideFlags.HideAndDontSave;
 
-        texture.SetPixels((GameObject.Find("Quad").GetComponent<Renderer>().material.mainTexture as Texture2D).GetPixels());
+        texture.SetPixels(OriginalTexture.GetPixels());
 
         texture.Apply();
 
@@ -31,6 +35,14 @@ public class Razor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!Shaving) {
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                StartCoroutine(ShaveAgain());
+            }
+
+            return;
+        }
+
         ShaveTimer += Time.deltaTime;
         if (ShaveTimer >= ShaveTime) {
             var sym1 = 0.0f;
@@ -52,9 +64,19 @@ public class Razor : MonoBehaviour {
                 }
             }
 
-            var diff = Mathf.Abs(sym1 - sym2);
+            var diff = Mathf.Abs(sym1 - sym2);            
+
+            Shave = false;
+            GetComponent<AudioSource>().Stop();
+
+            GetComponentInChildren<ParticleSystem>().Stop();
+            iTween.MoveTo(gameObject, iTween.Hash("z", -6.415f, "time", 0.1f, "easetype", iTween.EaseType.easeOutCubic));
 
             ShaveTimer = 0;            
+           
+            StartCoroutine(TakePicture());
+            GetComponent<AudioSource>().PlayOneShot(Click);
+            Shaving = false;
         }
 
         if (!Shave && Input.GetMouseButtonDown(0)) {
@@ -69,11 +91,7 @@ public class Razor : MonoBehaviour {
             GetComponent<AudioSource>().Stop();
 
             GetComponentInChildren<ParticleSystem>().Stop();
-
             iTween.MoveTo(gameObject, iTween.Hash("z", -6.415f, "time", 0.1f, "easetype", iTween.EaseType.easeOutCubic));
-
-            StartCoroutine(TakePicture());
-            GetComponent<AudioSource>().PlayOneShot(Click);
         }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -110,7 +128,20 @@ public class Razor : MonoBehaviour {
         }       
 	}
 
+    public IEnumerator ShaveAgain() {
+        ResetTex();        
+
+        iPhoneTweener._.SlideOut();
+        yield return new WaitForSeconds(1);
+
+        Shaving = true;
+    }
+
     public IEnumerator TakePicture() {
+        foreach (var ren in GetComponentsInChildren<MeshRenderer>()) {
+            ren.enabled = false;
+        }
+
         Camera.main.fieldOfView = 54;
         RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
         Camera.main.targetTexture = rt;
@@ -129,7 +160,11 @@ public class Razor : MonoBehaviour {
         
         Fader.FadeOut(0.4f);
 
-        iPhoneTweener._.SlideIn(screenShot, 100, 5);
+        iPhoneTweener._.SlideIn(screenShot, Random.Range(1, 150), Random.Range(2, 15));
+
+        foreach (var ren in GetComponentsInChildren<MeshRenderer>()) {
+            ren.enabled = true;
+        }
 
         ;
     }
