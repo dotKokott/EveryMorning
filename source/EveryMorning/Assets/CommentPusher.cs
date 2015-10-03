@@ -28,7 +28,34 @@ public class CommentPusher : MonoBehaviour {
         "What...",
         "Are you kidding?",
         "I like what you've done with the mustache!",
-        "Look at this cutie"
+        "Look at this cutie",
+        "What god gives...",
+        "Nice!",
+        "Oh this looks cool man",
+        "Barely recognize you",
+        "So much better",
+        "I don't like it",
+        "Is this fake?",
+        "Are you forreal?",
+        "This is cool!",
+        "It suits you man",
+        "www.frapscracked.com",
+        "Aren't you the guy from Fru?",
+        // From David :D
+        "<color=#0000FF>#Selfie-Beach</color>",
+        "I mustache you a question: Why?",
+        "Your new persona scares me",
+        "Mind the gap",
+        "The Games Industry is grooming!",
+        "Breda Beard Baron",
+        "So fresh and so clean, clean",
+        "Mattia Traverso in: \"Stubble Trouble\"",
+        "It's just a phase. You'll get over it. We'll all get over it...",
+        "This beard tells me you are neither woman, nor a child.",
+        "Looks quite jizzable",
+        "Ron Swanson approves",
+        "It compliments your cheekbones",
+        "Looks like a less masculine truckdriver"
     };
 
     // Use this for initialization
