@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CommentPusher : MonoBehaviour {
 
@@ -49,11 +50,21 @@ public class CommentPusher : MonoBehaviour {
             oldComment = GameObject.Find( "insta_comment(Clone)" );
         }
 
+        var au = new List<string>( authors );
+        var me = new List<string>( messages );
+
         for ( int i = 0; i < max; i++ ) {
             var c = Instantiate( prefab );
             c.transform.SetParent( transform );
-            c.transform.Find( "comment_author" ).GetComponent<Text>().text = authors[Random.Range( 0, authors.Length )];
-            c.transform.Find( "comment_message" ).GetComponent<Text>().text = messages[Random.Range( 0, messages.Length )];
+
+            int index = Random.Range( 0, au.Count );
+            c.transform.Find( "comment_author" ).GetComponent<Text>().text = au[index];// authors[Random.Range( 0, authors.Length )];
+            au.RemoveAt( index );
+
+            index = Random.Range( 0, me.Count );
+            c.transform.Find( "comment_message" ).GetComponent<Text>().text = me[index];// messages[Random.Range( 0, messages.Length )];
+            me.RemoveAt( index );
+
             var pos = new Vector2( 0, -135 - ( 30 * i ) );
             c.GetComponent<RectTransform>().localPosition = pos;
             c.GetComponent<RectTransform>().localScale = new Vector3( 1, 1, 1 );
@@ -71,7 +82,6 @@ public class CommentPusher : MonoBehaviour {
     }
 
     private void movecomments( float value ) {
-        Debug.Log( value );
         var v = rtransform.localPosition;
         v.y = value;
         rtransform.localPosition = v;
